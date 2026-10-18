@@ -1,45 +1,84 @@
 <ion-content [fullscreen]="true">
-  <ion-list class="main-list">
-    <ion-item class="title-item">
-      <ion-label>
-        <p class="eyebrow">Control de gastos</p>
-        <h1>Añadir gasto</h1>
-        <p class="description">Registra un nuevo gasto de forma rápida.</p>
-      </ion-label>
-    </ion-item>
-    <ion-item class="form-control">
-      <ion-select
-        label="Tipo de Gasto"
-        labelPlacement="floating"
-        placeholder="Selecciona una categoría"
-        [(ngModel)]="selectedOption">
-        <ion-select-option value="hobbies-vices">Hobbies / Vicios</ion-select-option>
-        <ion-select-option value="necessary-expenses">Gastos Necesarios</ion-select-option>
-      </ion-select>
-    </ion-item>
+  <form
+    class="main-list"
+    [formGroup]="expenseForm"
+    (ngSubmit)="addExpense()"
+  >
+    <ion-list>
+      <ion-item class="title-item">
+        <ion-label>
+          <p class="eyebrow">Control de gastos</p>
+          <h1>Añadir gasto</h1>
+          <p class="description">Registra un nuevo gasto de forma rápida.</p>
+        </ion-label>
+      </ion-item>
 
-    <ion-item class="form-control">
-      <ion-input
-        label="Fecha"
-        labelPlacement="floating"
-        type="date"
-        [(ngModel)]="expenseDate"
-      ></ion-input>
-    </ion-item>
+      <ion-item class="form-control">
+        <ion-select
+          label="Tipo de Gasto"
+          labelPlacement="floating"
+          placeholder="Selecciona una categoría"
+          formControlName="expenseType">
+          <ion-select-option value="hobbies-vices">
+            Hobbies / Vicios
+          </ion-select-option>
+          <ion-select-option value="necessary-expenses">
+            Gastos Necesarios
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      @if (expenseTypeControl.invalid && expenseTypeControl.touched) {
+        <ion-text class="error-message" color="danger">
+          Selecciona un tipo de gasto.
+        </ion-text>
+      }
 
-    <ion-item class="form-control">
-      <ion-input
-        label="Monto del Gasto"
-        labelPlacement="floating"
-        type="number"
-        inputmode="decimal"
-        placeholder="0,00 €"
-        [(ngModel)]="expenseAmount"
-      ></ion-input>
-    </ion-item>
+      <ion-item class="form-control">
+        <ion-input
+          label="Fecha"
+          labelPlacement="floating"
+          type="date"
+          formControlName="expenseDate"
+        ></ion-input>
+      </ion-item>
+      @if (expenseDateControl.invalid && expenseDateControl.touched) {
+        <ion-text class="error-message" color="danger">
+          La fecha es obligatoria.
+        </ion-text>
+      }
 
-    <ion-item class="action-item">
-      <ion-button expand="block" (click)="addExpense()">Añadir gasto</ion-button>
-    </ion-item>
-  </ion-list>
+      <ion-item class="form-control">
+        <ion-input
+          label="Monto del Gasto"
+          labelPlacement="floating"
+          type="number"
+          inputmode="decimal"
+          placeholder="0,00 €"
+          formControlName="expenseAmount"
+        ></ion-input>
+      </ion-item>
+      @if (
+        expenseAmountControl.hasError('required') &&
+        expenseAmountControl.touched
+      ) {
+        <ion-text class="error-message" color="danger">
+          Introduce un importe.
+        </ion-text>
+      }
+      @if (
+        expenseAmountControl.hasError('min') &&
+        expenseAmountControl.touched
+      ) {
+        <ion-text class="error-message" color="danger">
+          El importe debe ser mayor que 0.
+        </ion-text>
+      }
+
+      <ion-item class="action-item">
+        <ion-button type="submit" expand="block">
+          Añadir gasto
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </form>
 </ion-content>

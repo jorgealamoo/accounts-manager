@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -13,7 +13,7 @@ import {
   IonButton,
 } from '@ionic/angular';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-tab2',
@@ -33,12 +33,20 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     IonInput,
     IonButton,
+    ReactiveFormsModule,
   ],
 })
 export class Tab2Page {
   selectedOption: string = 'hobbies-vices';
   expenseAmount: number | null = null;
   expenseDate: string = this.getTodayDate();
+  private readonly formBuilder = inject(FormBuilder);
+
+  readonly expenseForm = this.formBuilder.group({
+    expenseType: [this.selectedOption, Validators.required],
+    expenseDate: [this.expenseDate, Validators.required],
+    expenseAmount: [this.expenseAmount, [Validators.required, Validators.min(0.01)]],
+  });
 
   private getTodayDate(): string {
     const today = new Date();
@@ -49,14 +57,26 @@ export class Tab2Page {
     return `${year}-${month}-${day}`;
   }
 
-  addExpense() {
-    console.log(
-      'Selected Option:',
-      this.selectedOption,
-      '\nExpense Date:',
-      this.expenseDate,
-      '\nExpense Amount:',
-      this.expenseAmount,
-    );
+  addExpense(): void {
+    if (this.expenseForm.invalid) {
+      this.expenseForm.markAllAsTouched();
+      return;
+    }
+
+    const expense = this.expenseForm.getRawValue();
+
+    console.log("Gasto válido añadido", expense);
+  }
+
+  get expenseTypeControl() {
+    return this.expenseForm.controls['expenseType'];
+  }
+
+  get expenseDateControl() {
+    return this.expenseForm.controls['expenseDate'];
+  }
+
+  get expenseAmountControl() {
+    return this.expenseForm.controls['expenseAmount'];
   }
 }
