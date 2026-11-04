@@ -1,8 +1,5 @@
 import { Component, inject } from '@angular/core';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonList,
   IonItem,
@@ -11,8 +8,8 @@ import {
   IonSelectOption,
   IonInput,
   IonButton,
+  IonText,
 } from '@ionic/angular';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -20,11 +17,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
-    ExploreContainerComponent,
     IonList,
     IonItem,
     IonLabel,
@@ -33,16 +26,23 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
     FormsModule,
     IonInput,
     IonButton,
+    IonText,
     ReactiveFormsModule,
   ],
 })
 export class Tab2Page {
+  readonly accounts = [
+    { id: 'cash', name: 'Efectivo' },
+    { id: 'account-1', name: 'Cuenta 1' },
+    { id: 'account-2', name: 'Cuenta 2' },
+  ];
   selectedOption: string = 'hobbies-vices';
   expenseAmount: number | null = null;
   expenseDate: string = this.getTodayDate();
   private readonly formBuilder = inject(FormBuilder);
 
   readonly expenseForm = this.formBuilder.group({
+    expenseAccount: ['', Validators.required],
     expenseType: [this.selectedOption, Validators.required],
     expenseDate: [this.expenseDate, Validators.required],
     expenseAmount: [this.expenseAmount, [Validators.required, Validators.min(0.01)]],

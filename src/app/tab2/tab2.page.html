@@ -15,6 +15,23 @@
 
       <ion-item class="form-control">
         <ion-select
+          label="Cuenta de Gasto"
+          labelPlacement="floating"
+          placeholder="Selecciona una cuenta"
+          formControlName="expenseAccount">
+          <ion-select-option value="">
+            Selecciona una cuenta
+          </ion-select-option>
+          @for (account of accounts; track account.id) {
+            <ion-select-option [value]="account.id">
+              {{ account.name }}
+            </ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="form-control">
+        <ion-select
           label="Tipo de Gasto"
           labelPlacement="floating"
           placeholder="Selecciona una categoría"
