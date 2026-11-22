@@ -39,6 +39,7 @@ export class Tab2Page {
   selectedOption: string = 'hobbies-vices';
   expenseAmount: number | null = null;
   expenseDate: string = this.getTodayDate();
+  expenseDescription: string = '';
   private readonly formBuilder = inject(FormBuilder);
 
   readonly expenseForm = this.formBuilder.group({
@@ -46,6 +47,7 @@ export class Tab2Page {
     expenseType: [this.selectedOption, Validators.required],
     expenseDate: [this.expenseDate, Validators.required],
     expenseAmount: [this.expenseAmount, [Validators.required, Validators.min(0.01)]],
+    expenseDescription: [this.expenseDescription],
   });
 
   private getTodayDate(): string {
@@ -78,5 +80,9 @@ export class Tab2Page {
 
   get expenseAmountControl() {
     return this.expenseForm.controls['expenseAmount'];
+  }
+
+  get expenseDescriptionControl() {
+    return this.expenseForm.controls['expenseDescription'];
   }
 }
